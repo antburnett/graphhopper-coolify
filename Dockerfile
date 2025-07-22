@@ -13,7 +13,7 @@ RUN wget https://raw.githubusercontent.com/graphhopper/graphhopper/10.x/config-e
 # Create data directory
 RUN mkdir -p /app/data
 
-# Create optimized config for your 256GB server
+# Create optimized config for GraphHopper 10.0 (corrected format)
 RUN echo 'graphhopper:\n\
   datareader.file: /app/data/australian_capital_territory-latest.osm.pbf\n\
   graph.location: /app/data/graph-cache\n\
@@ -24,14 +24,11 @@ RUN echo 'graphhopper:\n\
   prepare.ch.weightings: fastest\n\
   profiles:\n\
     - name: car\n\
-      vehicle: car\n\
       weighting: fastest\n\
       turn_costs: true\n\
     - name: bike\n\
-      vehicle: bike\n\
       weighting: fastest\n\
     - name: foot\n\
-      vehicle: foot\n\
       weighting: fastest\n\
 server:\n\
   application_connectors:\n\
