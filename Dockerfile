@@ -6,35 +6,17 @@ WORKDIR /app
 # Install wget and curl
 RUN apt-get update && apt-get install -y wget curl && rm -rf /var/lib/apt/lists/*
 
-# Download GraphHopper JAR and config
+# Download GraphHopper JAR and official config
 RUN wget https://repo1.maven.org/maven2/com/graphhopper/graphhopper-web/10.0/graphhopper-web-10.0.jar -O graphhopper-web.jar
-RUN wget https://raw.githubusercontent.com/graphhopper/graphhopper/10.x/config-example.yml -O config-example.yml
+RUN wget https://raw.githubusercontent.com/graphhopper/graphhopper/10.x/config-example.yml -O config.yml
 
 # Create data directory
 RUN mkdir -p /app/data
 
-# Create optimized config for GraphHopper 10.0 (corrected format)
-RUN echo 'graphhopper:\n\
-  datareader.file: /app/data/australian_capital_territory-latest.osm.pbf\n\
-  graph.location: /app/data/graph-cache\n\
-  graph.dataaccess: RAM_STORE\n\
-  graph.encoded_values: road_class,road_class_link,road_environment,max_speed,road_access\n\
-  prepare.lm.active: true\n\
-  prepare.lm.landmarks: 64\n\
-  prepare.ch.weightings: fastest\n\
-  profiles:\n\
-    - name: car\n\
-      weighting: fastest\n\
-      turn_costs: true\n\
-    - name: bike\n\
-      weighting: fastest\n\
-    - name: foot\n\
-      weighting: fastest\n\
-server:\n\
-  application_connectors:\n\
-    - type: http\n\
-      port: 8989\n\
-      bind_host: 0.0.0.0' > /app/config.yml
+# Modify the config to use our ACT data file and optimize for your 256GB server
+RUN sed -i 's|datareader.file:.*|datareader.file: /app/data/australian_capital_territory-latest.osm.pbf|' config.yml && \
+    sed -i 's|graph.location:.*|graph.location: /app/data/graph-cache|' config.yml && \
+    sed -i 's|graph.dataaccess:.*|graph.dataaccess: RAM_STORE|' config.yml
 
 # Expose port
 EXPOSE 8989
