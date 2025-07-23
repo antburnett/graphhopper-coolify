@@ -9,10 +9,10 @@ RUN apt-get update && apt-get install -y wget curl && rm -rf /var/lib/apt/lists/
 # Download GraphHopper JAR
 RUN wget https://repo1.maven.org/maven2/com/graphhopper/graphhopper-web/10.0/graphhopper-web-10.0.jar -O graphhopper-web.jar
 
-# Create data directory (elevation cache will be in persistent storage)
+# Create data directory
 RUN mkdir -p /app/data
 
-# Create optimized config with elevation support using persistent storage
+# Create optimized config with turn restrictions enabled
 RUN echo 'graphhopper:' > /app/config.yml && \
     echo '  datareader.file: /app/data/australian_capital_territory-latest.osm.pbf' >> /app/config.yml && \
     echo '  graph.location: /app/data/graph-cache' >> /app/config.yml && \
@@ -27,6 +27,9 @@ RUN echo 'graphhopper:' > /app/config.yml && \
     echo '  profiles:' >> /app/config.yml && \
     echo '    - name: car' >> /app/config.yml && \
     echo '      custom_model_files: [car.json]' >> /app/config.yml && \
+    echo '      turn_costs:' >> /app/config.yml && \
+    echo '        vehicle_types: [motorcar, motor_vehicle]' >> /app/config.yml && \
+    echo '        u_turn_costs: 60' >> /app/config.yml && \
     echo '  profiles_ch:' >> /app/config.yml && \
     echo '    - profile: car' >> /app/config.yml && \
     echo '  profiles_lm:' >> /app/config.yml && \
