@@ -12,7 +12,7 @@ RUN wget https://repo1.maven.org/maven2/com/graphhopper/graphhopper-web/10.0/gra
 # Create data directory
 RUN mkdir -p /app/data
 
-# Create config with car/truck profiles, Australian turn costs, and turn restrictions
+# Create clean config with only proven working settings
 RUN echo 'graphhopper:' > /app/config.yml && \
     echo '  datareader.file: /app/data/australia-latest.osm.pbf' >> /app/config.yml && \
     echo '  graph.location: /app/data/graph-cache' >> /app/config.yml && \
@@ -21,9 +21,6 @@ RUN echo 'graphhopper:' > /app/config.yml && \
     echo '  prepare.lm.landmarks: 64' >> /app/config.yml && \
     echo '  import.osm.ignored_highways: footway,cycleway,path,pedestrian,steps' >> /app/config.yml && \
     echo '  import.osm.turn_restrictions: true' >> /app/config.yml && \
-    echo '  osmreader.osm_file_download_url: https://download.openstreetmap.fr/extracts/oceania/australia-latest.osm.pbf' >> /app/config.yml && \
-    echo '  osmreader.osm_replication_url: https://download.openstreetmap.fr/replication/oceania/australia/minute/' >> /app/config.yml && \
-    echo '  osmreader.osm_replication_interval: 60' >> /app/config.yml && \
     echo '  profiles:' >> /app/config.yml && \
     echo '    - name: car' >> /app/config.yml && \
     echo '      custom_model_files: [car.json]' >> /app/config.yml && \
@@ -68,8 +65,8 @@ RUN echo 'graphhopper:' > /app/config.yml && \
 # Expose port
 EXPOSE 8989
 
-# Set Java memory options for your 256GB server
+# Set Java memory options
 ENV JAVA_OPTS="-Xmx32g -Xms8g -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
 
-# Download Australia data and start GraphHopper
+# Simple startup: download once and start
 CMD ["sh", "-c", "wget -O /app/data/australia-latest.osm.pbf https://download.openstreetmap.fr/extracts/oceania/australia-latest.osm.pbf || true && java $JAVA_OPTS -jar graphhopper-web.jar server config.yml"]
