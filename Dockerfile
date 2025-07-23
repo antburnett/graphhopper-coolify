@@ -25,4 +25,5 @@ EXPOSE 8989
 ENV JAVA_OPTS="-Xmx32g -Xms8g -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
 
 # Download OSM data and start GraphHopper
-CMD ["sh", "-c", "wget -O /app/data/australian_capital_territory-latest.osm.pbf https://download.openstreetmap.fr/extracts/oceania/australia/australian_capital_territory-latest.osm.pbf && java $JAVA_OPTS -jar graphhopper-web.jar server config.yml"]
+# CMD ["sh", "-c", "wget -O /app/data/australian_capital_territory-latest.osm.pbf https://download.openstreetmap.fr/extracts/oceania/australia/australian_capital_territory-latest.osm.pbf && java $JAVA_OPTS -jar graphhopper-web.jar server config.yml"]
+CMD ["sh", "-c", "wget -O /app/data/australian_capital_territory-latest.osm.pbf https://osmextracts.findnearest.com.au/australian_capital_territory-latest.osm.pbf && java $JAVA_OPTS -jar graphhopper-web.jar server config.yml"]
