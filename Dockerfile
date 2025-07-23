@@ -32,16 +32,22 @@ RUN echo 'graphhopper:' > /app/config.yml && \
     echo '  osmreader.osm_replication_url: https://download.openstreetmap.fr/replication/oceania/australia/minute/' >> /app/config.yml && \
     echo '  osmreader.osm_replication_interval: 60' >> /app/config.yml && \
     echo '  profiles:' >> /app/config.yml && \
-    echo '    - name: car' >> /app/config.yml && \
-    echo '      custom_model_files: [car.json]' >> /app/config.yml && \
-    echo '      turn_costs:' >> /app/config.yml && \
-    echo '        vehicle_types: [motorcar, motor_vehicle]' >> /app/config.yml && \
-    echo '        u_turn_costs: 60' >> /app/config.yml && \
-    echo '    - name: truck' >> /app/config.yml && \
-    echo '      custom_model_files: [truck.json]' >> /app/config.yml && \
-    echo '      turn_costs:' >> /app/config.yml && \
-    echo '        vehicle_types: [hgv, motor_vehicle]' >> /app/config.yml && \
-    echo '        u_turn_costs: 120' >> /app/config.yml && \
+	echo '    - name: car' >> /app/config.yml && \
+	echo '      custom_model_files: [car.json]' >> /app/config.yml && \
+	echo '      turn_costs:' >> /app/config.yml && \
+	echo '        vehicle_types: [motorcar, motor_vehicle]' >> /app/config.yml && \
+	echo '        u_turn_costs: 60' >> /app/config.yml && \
+	echo '        right_turn_costs: 15' >> /app/config.yml && \
+	echo '        left_turn_costs: 5' >> /app/config.yml && \
+	echo '        straight_costs: 0' >> /app/config.yml && \
+	echo '    - name: truck' >> /app/config.yml && \
+	echo '      custom_model_files: [truck.json]' >> /app/config.yml && \
+	echo '      turn_costs:' >> /app/config.yml && \
+	echo '        vehicle_types: [hgv, motor_vehicle]' >> /app/config.yml && \
+	echo '        u_turn_costs: 120' >> /app/config.yml && \
+	echo '        right_turn_costs: 25' >> /app/config.yml && \
+	echo '        left_turn_costs: 8' >> /app/config.yml && \
+	echo '        straight_costs: 0' >> /app/config.yml \
     echo '  profiles_ch:' >> /app/config.yml && \
     echo '    - profile: car' >> /app/config.yml && \
     echo '    - profile: truck' >> /app/config.yml && \
