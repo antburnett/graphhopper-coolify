@@ -1,6 +1,6 @@
 FROM openjdk:17-jdk-slim
 
-# Set working directory
+# Set working directory to /app
 WORKDIR /app
 
 # Install wget and curl
