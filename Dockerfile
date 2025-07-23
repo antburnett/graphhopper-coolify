@@ -12,12 +12,12 @@ RUN wget https://repo1.maven.org/maven2/com/graphhopper/graphhopper-web/10.0/gra
 # Create data directory
 RUN mkdir -p /app/data
 
-# Create optimized config with car AND truck profiles (FIXED encoded values)
+# Create config with car and truck profiles using VALID encoded values
 RUN echo 'graphhopper:' > /app/config.yml && \
     echo '  datareader.file: /app/data/australian_capital_territory-latest.osm.pbf' >> /app/config.yml && \
     echo '  graph.location: /app/data/graph-cache' >> /app/config.yml && \
     echo '  graph.dataaccess.default_type: RAM_STORE' >> /app/config.yml && \
-    echo '  graph.encoded_values: road_class, road_class_link, road_environment, max_speed, road_access, car_access, car_average_speed, hgv_access, hgv_average_speed, max_width, max_height, max_weight, hgv' >> /app/config.yml && \
+    echo '  graph.encoded_values: road_class, road_class_link, road_environment, max_speed, road_access, car_access, car_average_speed, hgv, max_width, max_height, max_weight' >> /app/config.yml && \
     echo '  graph.elevation.provider: srtm' >> /app/config.yml && \
     echo '  graph.elevation.cache_dir: /app/data/elevation-cache' >> /app/config.yml && \
     echo '  graph.elevation.dataaccess: MMAP' >> /app/config.yml && \
@@ -65,5 +65,5 @@ EXPOSE 8989
 # Set Java memory options for your 256GB server
 ENV JAVA_OPTS="-Xmx32g -Xms8g -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
 
-# Simple startup command (removed auto-retry loop)
+# Simple startup command
 CMD ["sh", "-c", "wget -O /app/data/australian_capital_territory-latest.osm.pbf https://osmextracts.findnearest.com.au/australian_capital_territory-latest.osm.pbf || true && java $JAVA_OPTS -jar graphhopper-web.jar server config.yml"]
