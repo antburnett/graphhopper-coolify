@@ -12,39 +12,37 @@ RUN wget https://repo1.maven.org/maven2/com/graphhopper/graphhopper-web/10.0/gra
 # Create data directory
 RUN mkdir -p /app/data
 
-# Create optimized config for your 256GB server
-RUN cat > /app/config.yml << 'EOF'
-graphhopper:
-  datareader.file: /app/data/australian_capital_territory-latest.osm.pbf
-  graph.location: /app/data/graph-cache
-  graph.dataaccess.default_type: RAM_STORE
-  graph.encoded_values: road_class,road_class_link,road_environment,max_speed,road_access
-  prepare.lm.landmarks: 64
-  profiles:
-    - name: car
-      custom_model_files: [car.json]
-  profiles_ch:
-    - profile: car
-  profiles_lm:
-    - profile: car
-  prepare.min_network_size: 200
-
-server:
-  application_connectors:
-    - type: http
-      port: 8989
-      bind_host: 0.0.0.0
-  admin_connectors:
-    - type: http
-      port: 8990
-      bind_host: 0.0.0.0
-
-logging:
-  appenders:
-    - type: console
-      time_zone: UTC
-      log_format: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
-EOF
+# Create optimized config using echo commands
+RUN echo 'graphhopper:' > /app/config.yml && \
+    echo '  datareader.file: /app/data/australian_capital_territory-latest.osm.pbf' >> /app/config.yml && \
+    echo '  graph.location: /app/data/graph-cache' >> /app/config.yml && \
+    echo '  graph.dataaccess.default_type: RAM_STORE' >> /app/config.yml && \
+    echo '  graph.encoded_values: road_class,road_class_link,road_environment,max_speed,road_access' >> /app/config.yml && \
+    echo '  prepare.lm.landmarks: 64' >> /app/config.yml && \
+    echo '  profiles:' >> /app/config.yml && \
+    echo '    - name: car' >> /app/config.yml && \
+    echo '      custom_model_files: [car.json]' >> /app/config.yml && \
+    echo '  profiles_ch:' >> /app/config.yml && \
+    echo '    - profile: car' >> /app/config.yml && \
+    echo '  profiles_lm:' >> /app/config.yml && \
+    echo '    - profile: car' >> /app/config.yml && \
+    echo '  prepare.min_network_size: 200' >> /app/config.yml && \
+    echo '' >> /app/config.yml && \
+    echo 'server:' >> /app/config.yml && \
+    echo '  application_connectors:' >> /app/config.yml && \
+    echo '    - type: http' >> /app/config.yml && \
+    echo '      port: 8989' >> /app/config.yml && \
+    echo '      bind_host: 0.0.0.0' >> /app/config.yml && \
+    echo '  admin_connectors:' >> /app/config.yml && \
+    echo '    - type: http' >> /app/config.yml && \
+    echo '      port: 8990' >> /app/config.yml && \
+    echo '      bind_host: 0.0.0.0' >> /app/config.yml && \
+    echo '' >> /app/config.yml && \
+    echo 'logging:' >> /app/config.yml && \
+    echo '  appenders:' >> /app/config.yml && \
+    echo '    - type: console' >> /app/config.yml && \
+    echo '      time_zone: UTC' >> /app/config.yml && \
+    echo '      log_format: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"' >> /app/config.yml
 
 # Expose port
 EXPOSE 8989
