@@ -1,6 +1,6 @@
 FROM openjdk:17-jdk-slim
 
-# Set working directory to /app
+# Set working directory
 WORKDIR /app
 
 # Install wget and curl
@@ -12,9 +12,9 @@ RUN wget https://repo1.maven.org/maven2/com/graphhopper/graphhopper-web/10.0/gra
 # Create data directory
 RUN mkdir -p /app/data
 
-# Create config with car and truck profiles using VALID encoded values
+# Create config with car/truck profiles AND auto-updates
 RUN echo 'graphhopper:' > /app/config.yml && \
-    echo '  datareader.file: /app/data/australian_capital_territory-latest.osm.pbf' >> /app/config.yml && \
+    echo '  datareader.file: /app/data/australia-latest.osm.pbf' >> /app/config.yml && \
     echo '  graph.location: /app/data/graph-cache' >> /app/config.yml && \
     echo '  graph.dataaccess.default_type: RAM_STORE' >> /app/config.yml && \
     echo '  graph.encoded_values: road_class, road_class_link, road_environment, max_speed, road_access, car_access, car_average_speed, hgv, max_width, max_height, max_weight' >> /app/config.yml && \
@@ -24,6 +24,13 @@ RUN echo 'graphhopper:' > /app/config.yml && \
     echo '  graph.elevation.interpolate: bilinear' >> /app/config.yml && \
     echo '  prepare.lm.landmarks: 64' >> /app/config.yml && \
     echo '  import.osm.ignored_highways: footway,cycleway,path,pedestrian,steps' >> /app/config.yml && \
+    echo '  datareader.osmreader.osm.ignored_highways: footway,cycleway,path,pedestrian,steps' >> /app/config.yml && \
+    echo '  gtfs.file:' >> /app/config.yml && \
+    echo '  datareader.date_range_parser_day: yyyy-MM-dd' >> /app/config.yml && \
+    echo '  graph.flag_encoders: car,truck' >> /app/config.yml && \
+    echo '  osmreader.osm_file_download_url: https://download.openstreetmap.fr/extracts/oceania/australia-latest.osm.pbf' >> /app/config.yml && \
+    echo '  osmreader.osm_replication_url: https://download.openstreetmap.fr/replication/oceania/australia/minute/' >> /app/config.yml && \
+    echo '  osmreader.osm_replication_interval: 60' >> /app/config.yml && \
     echo '  profiles:' >> /app/config.yml && \
     echo '    - name: car' >> /app/config.yml && \
     echo '      custom_model_files: [car.json]' >> /app/config.yml && \
@@ -65,5 +72,5 @@ EXPOSE 8989
 # Set Java memory options for your 256GB server
 ENV JAVA_OPTS="-Xmx32g -Xms8g -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
 
-# Simple startup command
-CMD ["sh", "-c", "wget -O /app/data/australian_capital_territory-latest.osm.pbf https://osmextracts.findnearest.com.au/australian_capital_territory-latest.osm.pbf || true && java $JAVA_OPTS -jar graphhopper-web.jar server config.yml"]
+# Download Australia data and start with auto-updates
+CMD ["sh", "-c", "wget -O /app/data/australia-latest.osm.pbf https://download.openstreetmap.fr/extracts/oceania/australia-latest.osm.pbf || true && java $JAVA_OPTS -jar graphhopper-web.jar server config.yml"]
