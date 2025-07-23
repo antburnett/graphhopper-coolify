@@ -19,6 +19,7 @@ RUN echo 'graphhopper:' > /app/config.yml && \
     echo '  graph.dataaccess.default_type: RAM_STORE' >> /app/config.yml && \
     echo '  graph.encoded_values: road_class,road_class_link,road_environment,max_speed,road_access' >> /app/config.yml && \
     echo '  prepare.lm.landmarks: 64' >> /app/config.yml && \
+    echo '  import.osm.ignored_highways: footway,cycleway,path,pedestrian,steps' >> /app/config.yml && \
     echo '  profiles:' >> /app/config.yml && \
     echo '    - name: car' >> /app/config.yml && \
     echo '      custom_model_files: [car.json]' >> /app/config.yml && \
