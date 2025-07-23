@@ -9,15 +9,19 @@ RUN apt-get update && apt-get install -y wget curl && rm -rf /var/lib/apt/lists/
 # Download GraphHopper JAR
 RUN wget https://repo1.maven.org/maven2/com/graphhopper/graphhopper-web/10.0/graphhopper-web-10.0.jar -O graphhopper-web.jar
 
-# Create data directory
+# Create data directory (elevation cache will be in persistent storage)
 RUN mkdir -p /app/data
 
-# Create optimized config using echo commands
+# Create optimized config with elevation support using persistent storage
 RUN echo 'graphhopper:' > /app/config.yml && \
     echo '  datareader.file: /app/data/australian_capital_territory-latest.osm.pbf' >> /app/config.yml && \
     echo '  graph.location: /app/data/graph-cache' >> /app/config.yml && \
     echo '  graph.dataaccess.default_type: RAM_STORE' >> /app/config.yml && \
     echo '  graph.encoded_values: road_class, road_class_link, road_environment, max_speed, road_access, car_access, car_average_speed' >> /app/config.yml && \
+    echo '  graph.elevation.provider: srtm' >> /app/config.yml && \
+    echo '  graph.elevation.cache_dir: /app/data/elevation-cache' >> /app/config.yml && \
+    echo '  graph.elevation.dataaccess: MMAP' >> /app/config.yml && \
+    echo '  graph.elevation.interpolate: bilinear' >> /app/config.yml && \
     echo '  prepare.lm.landmarks: 64' >> /app/config.yml && \
     echo '  import.osm.ignored_highways: footway,cycleway,path,pedestrian,steps' >> /app/config.yml && \
     echo '  profiles:' >> /app/config.yml && \
