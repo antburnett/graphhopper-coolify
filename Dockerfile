@@ -12,15 +12,14 @@ RUN wget https://repo1.maven.org/maven2/com/graphhopper/graphhopper-web/10.0/gra
 # Create data directory
 RUN mkdir -p /app/data
 
-# Create clean config with only proven working settings
+# Create config with VALID encoded values only
 RUN echo 'graphhopper:' > /app/config.yml && \
     echo '  datareader.file: /app/data/australia-latest.osm.pbf' >> /app/config.yml && \
     echo '  graph.location: /app/data/graph-cache' >> /app/config.yml && \
     echo '  graph.dataaccess.default_type: RAM_STORE' >> /app/config.yml && \
-    echo '  graph.encoded_values: road_class, road_class_link, road_environment, max_speed, road_access, car_access, car_average_speed, hgv, max_width, max_height, max_weight, turn_restriction' >> /app/config.yml && \
+    echo '  graph.encoded_values: road_class, road_class_link, road_environment, max_speed, road_access, car_access, car_average_speed, hgv, max_width, max_height, max_weight' >> /app/config.yml && \
     echo '  prepare.lm.landmarks: 64' >> /app/config.yml && \
     echo '  import.osm.ignored_highways: footway,cycleway,path,pedestrian,steps' >> /app/config.yml && \
-    echo '  import.osm.turn_restrictions: true' >> /app/config.yml && \
     echo '  profiles:' >> /app/config.yml && \
     echo '    - name: car' >> /app/config.yml && \
     echo '      custom_model_files: [car.json]' >> /app/config.yml && \
