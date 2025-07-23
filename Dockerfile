@@ -58,5 +58,12 @@ EXPOSE 8989
 # Set Java memory options for your 256GB server
 ENV JAVA_OPTS="-Xmx32g -Xms8g -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
 
-# Download OSM data and start GraphHopper
-CMD ["sh", "-c", "wget -O /app/data/australian_capital_territory-latest.osm.pbf https://osmextracts.findnearest.com.au/australian_capital_territory-latest.osm.pbf && java $JAVA_OPTS -jar graphhopper-web.jar server config.yml"]
+# Smart startup: handle cache conflicts gracefully
+CMD ["sh", "-c", "wget -O /app/data/australian_capital_territory-latest.osm.pbf https://osmextracts.findnearest.com.au/australian_capital_territory-latest.osm.pbf || true && \
+if ! java $JAVA_OPTS -jar graphhopper-web.jar server config.yml 2>&1 | grep -q 'Profiles do not match'; then \
+  java $JAVA_OPTS -jar graphhopper-web.jar server config.yml; \
+else \
+  echo 'Profile mismatch detected, clearing graph cache and retrying...'; \
+  rm -rf /app/data/graph-cache; \
+  java $JAVA_OPTS -jar graphhopper-web.jar server config.yml; \
+fi"]
