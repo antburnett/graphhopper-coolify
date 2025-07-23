@@ -12,7 +12,7 @@ RUN wget https://repo1.maven.org/maven2/com/graphhopper/graphhopper-web/10.0/gra
 # Create data directory
 RUN mkdir -p /app/data
 
-# Create config with VALID encoded values only
+# Create config with basic turn costs only
 RUN echo 'graphhopper:' > /app/config.yml && \
     echo '  datareader.file: /app/data/australia-latest.osm.pbf' >> /app/config.yml && \
     echo '  graph.location: /app/data/graph-cache' >> /app/config.yml && \
@@ -26,17 +26,11 @@ RUN echo 'graphhopper:' > /app/config.yml && \
     echo '      turn_costs:' >> /app/config.yml && \
     echo '        vehicle_types: [motorcar, motor_vehicle]' >> /app/config.yml && \
     echo '        u_turn_costs: 60' >> /app/config.yml && \
-    echo '        right_turn_costs: 15' >> /app/config.yml && \
-    echo '        left_turn_costs: 5' >> /app/config.yml && \
-    echo '        straight_costs: 0' >> /app/config.yml && \
     echo '    - name: truck' >> /app/config.yml && \
     echo '      custom_model_files: [truck.json]' >> /app/config.yml && \
     echo '      turn_costs:' >> /app/config.yml && \
     echo '        vehicle_types: [hgv, motor_vehicle]' >> /app/config.yml && \
     echo '        u_turn_costs: 120' >> /app/config.yml && \
-    echo '        right_turn_costs: 25' >> /app/config.yml && \
-    echo '        left_turn_costs: 8' >> /app/config.yml && \
-    echo '        straight_costs: 0' >> /app/config.yml && \
     echo '  profiles_ch:' >> /app/config.yml && \
     echo '    - profile: car' >> /app/config.yml && \
     echo '    - profile: truck' >> /app/config.yml && \
