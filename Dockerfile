@@ -12,12 +12,74 @@ RUN wget https://repo1.maven.org/maven2/com/graphhopper/graphhopper-web/10.0/gra
 # Create data directory
 RUN mkdir -p /app/data
 
-# Create config with basic turn costs only
+# Create car.json custom model that prefers motorways
+RUN echo '{' > /app/car.json && \
+    echo '  "priority": [' >> /app/car.json && \
+    echo '    {' >> /app/car.json && \
+    echo '      "if": "road_class == MOTORWAY",' >> /app/car.json && \
+    echo '      "multiply_by": "1.3"' >> /app/car.json && \
+    echo '    },' >> /app/car.json && \
+    echo '    {' >> /app/car.json && \
+    echo '      "if": "road_class == TRUNK",' >> /app/car.json && \
+    echo '      "multiply_by": "1.2"' >> /app/car.json && \
+    echo '    },' >> /app/car.json && \
+    echo '    {' >> /app/car.json && \
+    echo '      "if": "road_class == PRIMARY",' >> /app/car.json && \
+    echo '      "multiply_by": "1.1"' >> /app/car.json && \
+    echo '    }' >> /app/car.json && \
+    echo '  ],' >> /app/car.json && \
+    echo '  "speed": [' >> /app/car.json && \
+    echo '    {' >> /app/car.json && \
+    echo '      "if": "road_class == MOTORWAY",' >> /app/car.json && \
+    echo '      "limit_to": "130"' >> /app/car.json && \
+    echo '    },' >> /app/car.json && \
+    echo '    {' >> /app/car.json && \
+    echo '      "if": "road_class == TRUNK",' >> /app/car.json && \
+    echo '      "limit_to": "110"' >> /app/car.json && \
+    echo '    }' >> /app/car.json && \
+    echo '  ],' >> /app/car.json && \
+    echo '  "distance_influence": 70' >> /app/car.json && \
+    echo '}' >> /app/car.json
+
+# Create truck.json custom model
+RUN echo '{' > /app/truck.json && \
+    echo '  "priority": [' >> /app/truck.json && \
+    echo '    {' >> /app/truck.json && \
+    echo '      "if": "road_class == MOTORWAY",' >> /app/truck.json && \
+    echo '      "multiply_by": "1.2"' >> /app/truck.json && \
+    echo '    },' >> /app/truck.json && \
+    echo '    {' >> /app/truck.json && \
+    echo '      "if": "road_class == TRUNK",' >> /app/truck.json && \
+    echo '      "multiply_by": "1.1"' >> /app/truck.json && \
+    echo '    },' >> /app/truck.json && \
+    echo '    {' >> /app/truck.json && \
+    echo '      "if": "max_width < 3.0",' >> /app/truck.json && \
+    echo '      "multiply_by": "0"' >> /app/truck.json && \
+    echo '    },' >> /app/truck.json && \
+    echo '    {' >> /app/truck.json && \
+    echo '      "if": "max_height < 4.0",' >> /app/truck.json && \
+    echo '      "multiply_by": "0"' >> /app/truck.json && \
+    echo '    }' >> /app/truck.json && \
+    echo '  ],' >> /app/truck.json && \
+    echo '  "speed": [' >> /app/truck.json && \
+    echo '    {' >> /app/truck.json && \
+    echo '      "if": "road_class == MOTORWAY",' >> /app/truck.json && \
+    echo '      "limit_to": "100"' >> /app/truck.json && \
+    echo '    },' >> /app/truck.json && \
+    echo '    {' >> /app/truck.json && \
+    echo '      "if": "road_class == TRUNK",' >> /app/truck.json && \
+    echo '      "limit_to": "90"' >> /app/truck.json && \
+    echo '    }' >> /app/truck.json && \
+    echo '  ],' >> /app/truck.json && \
+    echo '  "distance_influence": 80' >> /app/truck.json && \
+    echo '}' >> /app/truck.json
+
+# Create improved config with turn costs and motorway preference
 RUN echo 'graphhopper:' > /app/config.yml && \
-    echo '  datareader.file: /app/data/australia-latest.osm.pbf' >> /app/config.yml && \
+    echo '  datareader.file: /app/data/new-south-wales-latest.osm.pbf' >> /app/config.yml && \
     echo '  graph.location: /app/data/graph-cache' >> /app/config.yml && \
     echo '  graph.dataaccess.default_type: RAM_STORE' >> /app/config.yml && \
-    echo '  graph.encoded_values: road_class, road_class_link, road_environment, max_speed, road_access, car_access, car_average_speed, hgv, max_width, max_height, max_weight' >> /app/config.yml && \
+    echo '  graph.encoded_values: road_class, road_class_link, road_environment, max_speed, road_access, car_access, car_average_speed, hgv, max_width, max_height, max_weight, toll' >> /app/config.yml && \
     echo '  prepare.lm.landmarks: 64' >> /app/config.yml && \
     echo '  import.osm.ignored_highways: footway,cycleway,path,pedestrian,steps' >> /app/config.yml && \
     echo '  profiles:' >> /app/config.yml && \
@@ -62,4 +124,4 @@ EXPOSE 8989
 ENV JAVA_OPTS="-Xmx32g -Xms8g -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
 
 # Simple startup: download once and start
-CMD ["sh", "-c", "wget -O /app/data/australia-latest.osm.pbf https://download.openstreetmap.fr/extracts/oceania/australia-latest.osm.pbf || true && java $JAVA_OPTS -jar graphhopper-web.jar server config.yml"]
+CMD ["sh", "-c", "wget -O /app/data/new-south-wales-latest.osm.pbf https://download.openstreetmap.fr/extracts/oceania/australia/new-south-wales-latest.osm.pbf || true && java $JAVA_OPTS -jar graphhopper-web.jar server config.yml"]
