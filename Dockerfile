@@ -16,16 +16,12 @@ RUN mkdir -p /app/data
 RUN echo '{' > /app/car_custom.json && \
     echo '  "priority": [' >> /app/car_custom.json && \
     echo '    {' >> /app/car_custom.json && \
-    echo '      "if": "road_class == MOTORWAY",' >> /app/car_custom.json && \
-    echo '      "multiply_by": "1.3"' >> /app/car_custom.json && \
+    echo '      "if": "road_class == SECONDARY || road_class == TERTIARY || road_class == UNCLASSIFIED",' >> /app/car_custom.json && \
+    echo '      "multiply_by": "0.7"' >> /app/car_custom.json && \
     echo '    },' >> /app/car_custom.json && \
     echo '    {' >> /app/car_custom.json && \
-    echo '      "if": "road_class == TRUNK",' >> /app/car_custom.json && \
-    echo '      "multiply_by": "1.2"' >> /app/car_custom.json && \
-    echo '    },' >> /app/car_custom.json && \
-    echo '    {' >> /app/car_custom.json && \
-    echo '      "if": "road_class == PRIMARY",' >> /app/car_custom.json && \
-    echo '      "multiply_by": "1.1"' >> /app/car_custom.json && \
+    echo '      "if": "road_class == RESIDENTIAL || road_class == SERVICE",' >> /app/car_custom.json && \
+    echo '      "multiply_by": "0.5"' >> /app/car_custom.json && \
     echo '    },' >> /app/car_custom.json && \
     echo '    {' >> /app/car_custom.json && \
     echo '      "if": "road_environment == BRIDGE || road_environment == TUNNEL",' >> /app/car_custom.json && \
@@ -49,12 +45,12 @@ RUN echo '{' > /app/car_custom.json && \
 RUN echo '{' > /app/truck_custom.json && \
     echo '  "priority": [' >> /app/truck_custom.json && \
     echo '    {' >> /app/truck_custom.json && \
-    echo '      "if": "road_class == MOTORWAY",' >> /app/truck_custom.json && \
-    echo '      "multiply_by": "1.2"' >> /app/truck_custom.json && \
+    echo '      "if": "road_class == SECONDARY || road_class == TERTIARY || road_class == UNCLASSIFIED",' >> /app/truck_custom.json && \
+    echo '      "multiply_by": "0.8"' >> /app/truck_custom.json && \
     echo '    },' >> /app/truck_custom.json && \
     echo '    {' >> /app/truck_custom.json && \
-    echo '      "if": "road_class == TRUNK",' >> /app/truck_custom.json && \
-    echo '      "multiply_by": "1.1"' >> /app/truck_custom.json && \
+    echo '      "if": "road_class == RESIDENTIAL || road_class == SERVICE",' >> /app/truck_custom.json && \
+    echo '      "multiply_by": "0.6"' >> /app/truck_custom.json && \
     echo '    },' >> /app/truck_custom.json && \
     echo '    {' >> /app/truck_custom.json && \
     echo '      "if": "max_width < 3.0",' >> /app/truck_custom.json && \
