@@ -14,7 +14,7 @@ RUN mkdir -p /app/data
 
 # Create clean config with just base profiles and turn costs
 RUN echo 'graphhopper:' > /app/config.yml && \
-    echo '  datareader.file: /app/data/new-south-wales-latest.osm.pbf' >> /app/config.yml && \
+    echo '  datareader.file: /app/data/australian_capital_territory-latest.osm.pbf' >> /app/config.yml && \
     echo '  graph.location: /app/data/graph-cache' >> /app/config.yml && \
     echo '  graph.dataaccess.default_type: RAM_STORE' >> /app/config.yml && \
     echo '  graph.encoded_values: road_class, road_class_link, road_environment, max_speed, road_access, car_access, car_average_speed, hgv, max_width, max_height, max_weight, toll' >> /app/config.yml && \
@@ -60,4 +60,4 @@ EXPOSE 8989
 ENV JAVA_OPTS="-Xmx32g -Xms8g -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
 
 # Simple startup: download once and start
-CMD ["sh", "-c", "wget -O /app/data/new-south-wales-latest.osm.pbf https://osmextracts.findnearest.com.au/new_south_wales-latest.osm.pbf || true && java $JAVA_OPTS -jar graphhopper-web.jar server config.yml"]
+CMD ["sh", "-c", "wget -O /app/data/australian_capital_territory-latest.osm.pbf https://osmextracts.findnearest.com.au/australian_capital_territory-latest.osm.pbf || true && java $JAVA_OPTS -jar graphhopper-web.jar server config.yml"]
