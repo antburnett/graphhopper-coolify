@@ -38,7 +38,7 @@ RUN echo '{' > /app/car_custom.json && \
     echo '      "limit_to": "110"' >> /app/car_custom.json && \
     echo '    }' >> /app/car_custom.json && \
     echo '  ],' >> /app/car_custom.json && \
-    echo '  "distance_influence": 70' >> /app/car_custom.json && \
+    echo '  "distance_influence": 90' >> /app/car_custom.json && \
     echo '}' >> /app/car_custom.json
 
 # Create truck_custom.json custom model
@@ -71,7 +71,7 @@ RUN echo '{' > /app/truck_custom.json && \
     echo '      "limit_to": "90"' >> /app/truck_custom.json && \
     echo '    }' >> /app/truck_custom.json && \
     echo '  ],' >> /app/truck_custom.json && \
-    echo '  "distance_influence": 80' >> /app/truck_custom.json && \
+    echo '  "distance_influence": 90' >> /app/truck_custom.json && \
     echo '}' >> /app/truck_custom.json
 
 # Create improved config with turn costs and motorway preference
