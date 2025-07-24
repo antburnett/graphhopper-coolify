@@ -13,14 +13,26 @@ RUN wget https://repo1.maven.org/maven2/com/graphhopper/graphhopper-web/10.0/gra
 # Create data directory
 RUN mkdir -p /app/data
 
-# Create minimal car_custom.json - just basic functionality
+# Create minimal but valid car_custom.json 
 RUN echo '{' > /app/car_custom.json && \
-    echo '  "distance_influence": 90' >> /app/car_custom.json && \
+    echo '  "distance_influence": 90,' >> /app/car_custom.json && \
+    echo '  "speed": [' >> /app/car_custom.json && \
+    echo '    {' >> /app/car_custom.json && \
+    echo '      "if": "true",' >> /app/car_custom.json && \
+    echo '      "multiply_by": "1.0"' >> /app/car_custom.json && \
+    echo '    }' >> /app/car_custom.json && \
+    echo '  ]' >> /app/car_custom.json && \
     echo '}' >> /app/car_custom.json
 
-# Create minimal truck_custom.json - just basic functionality  
+# Create minimal but valid truck_custom.json  
 RUN echo '{' > /app/truck_custom.json && \
-    echo '  "distance_influence": 90' >> /app/truck_custom.json && \
+    echo '  "distance_influence": 90,' >> /app/truck_custom.json && \
+    echo '  "speed": [' >> /app/truck_custom.json && \
+    echo '    {' >> /app/truck_custom.json && \
+    echo '      "if": "true",' >> /app/truck_custom.json && \
+    echo '      "multiply_by": "1.0"' >> /app/truck_custom.json && \
+    echo '    }' >> /app/truck_custom.json && \
+    echo '  ]' >> /app/truck_custom.json && \
     echo '}' >> /app/truck_custom.json
 
 # Create improved config with turn costs and motorway preference
