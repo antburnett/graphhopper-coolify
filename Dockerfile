@@ -1,6 +1,6 @@
 FROM openjdk:17-jdk-slim
 
-# Dockerfile generated at 2025-07-24 03:17:42 UTC
+# Dockerfile generated at 2025-07-24 03:45:15 UTC - FORCE UPDATE
 # Set working directory
 WORKDIR /app
 
