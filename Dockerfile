@@ -12,67 +12,67 @@ RUN wget https://repo1.maven.org/maven2/com/graphhopper/graphhopper-web/10.0/gra
 # Create data directory
 RUN mkdir -p /app/data
 
-# Create car.json custom model that prefers motorways
-RUN echo '{' > /app/car.json && \
-    echo '  "priority": [' >> /app/car.json && \
-    echo '    {' >> /app/car.json && \
-    echo '      "if": "road_class == MOTORWAY",' >> /app/car.json && \
-    echo '      "multiply_by": "1.3"' >> /app/car.json && \
-    echo '    },' >> /app/car.json && \
-    echo '    {' >> /app/car.json && \
-    echo '      "if": "road_class == TRUNK",' >> /app/car.json && \
-    echo '      "multiply_by": "1.2"' >> /app/car.json && \
-    echo '    },' >> /app/car.json && \
-    echo '    {' >> /app/car.json && \
-    echo '      "if": "road_class == PRIMARY",' >> /app/car.json && \
-    echo '      "multiply_by": "1.1"' >> /app/car.json && \
-    echo '    }' >> /app/car.json && \
-    echo '  ],' >> /app/car.json && \
-    echo '  "speed": [' >> /app/car.json && \
-    echo '    {' >> /app/car.json && \
-    echo '      "if": "road_class == MOTORWAY",' >> /app/car.json && \
-    echo '      "limit_to": "130"' >> /app/car.json && \
-    echo '    },' >> /app/car.json && \
-    echo '    {' >> /app/car.json && \
-    echo '      "if": "road_class == TRUNK",' >> /app/car.json && \
-    echo '      "limit_to": "110"' >> /app/car.json && \
-    echo '    }' >> /app/car.json && \
-    echo '  ],' >> /app/car.json && \
-    echo '  "distance_influence": 70' >> /app/car.json && \
-    echo '}' >> /app/car.json
+# Create car_motorway.json custom model that prefers motorways
+RUN echo '{' > /app/car_motorway.json && \
+    echo '  "priority": [' >> /app/car_motorway.json && \
+    echo '    {' >> /app/car_motorway.json && \
+    echo '      "if": "road_class == MOTORWAY",' >> /app/car_motorway.json && \
+    echo '      "multiply_by": "1.3"' >> /app/car_motorway.json && \
+    echo '    },' >> /app/car_motorway.json && \
+    echo '    {' >> /app/car_motorway.json && \
+    echo '      "if": "road_class == TRUNK",' >> /app/car_motorway.json && \
+    echo '      "multiply_by": "1.2"' >> /app/car_motorway.json && \
+    echo '    },' >> /app/car_motorway.json && \
+    echo '    {' >> /app/car_motorway.json && \
+    echo '      "if": "road_class == PRIMARY",' >> /app/car_motorway.json && \
+    echo '      "multiply_by": "1.1"' >> /app/car_motorway.json && \
+    echo '    }' >> /app/car_motorway.json && \
+    echo '  ],' >> /app/car_motorway.json && \
+    echo '  "speed": [' >> /app/car_motorway.json && \
+    echo '    {' >> /app/car_motorway.json && \
+    echo '      "if": "road_class == MOTORWAY",' >> /app/car_motorway.json && \
+    echo '      "limit_to": "130"' >> /app/car_motorway.json && \
+    echo '    },' >> /app/car_motorway.json && \
+    echo '    {' >> /app/car_motorway.json && \
+    echo '      "if": "road_class == TRUNK",' >> /app/car_motorway.json && \
+    echo '      "limit_to": "110"' >> /app/car_motorway.json && \
+    echo '    }' >> /app/car_motorway.json && \
+    echo '  ],' >> /app/car_motorway.json && \
+    echo '  "distance_influence": 70' >> /app/car_motorway.json && \
+    echo '}' >> /app/car_motorway.json
 
-# Create truck.json custom model
-RUN echo '{' > /app/truck.json && \
-    echo '  "priority": [' >> /app/truck.json && \
-    echo '    {' >> /app/truck.json && \
-    echo '      "if": "road_class == MOTORWAY",' >> /app/truck.json && \
-    echo '      "multiply_by": "1.2"' >> /app/truck.json && \
-    echo '    },' >> /app/truck.json && \
-    echo '    {' >> /app/truck.json && \
-    echo '      "if": "road_class == TRUNK",' >> /app/truck.json && \
-    echo '      "multiply_by": "1.1"' >> /app/truck.json && \
-    echo '    },' >> /app/truck.json && \
-    echo '    {' >> /app/truck.json && \
-    echo '      "if": "max_width < 3.0",' >> /app/truck.json && \
-    echo '      "multiply_by": "0"' >> /app/truck.json && \
-    echo '    },' >> /app/truck.json && \
-    echo '    {' >> /app/truck.json && \
-    echo '      "if": "max_height < 4.0",' >> /app/truck.json && \
-    echo '      "multiply_by": "0"' >> /app/truck.json && \
-    echo '    }' >> /app/truck.json && \
-    echo '  ],' >> /app/truck.json && \
-    echo '  "speed": [' >> /app/truck.json && \
-    echo '    {' >> /app/truck.json && \
-    echo '      "if": "road_class == MOTORWAY",' >> /app/truck.json && \
-    echo '      "limit_to": "100"' >> /app/truck.json && \
-    echo '    },' >> /app/truck.json && \
-    echo '    {' >> /app/truck.json && \
-    echo '      "if": "road_class == TRUNK",' >> /app/truck.json && \
-    echo '      "limit_to": "90"' >> /app/truck.json && \
-    echo '    }' >> /app/truck.json && \
-    echo '  ],' >> /app/truck.json && \
-    echo '  "distance_influence": 80' >> /app/truck.json && \
-    echo '}' >> /app/truck.json
+# Create truck_custom.json custom model
+RUN echo '{' > /app/truck_custom.json && \
+    echo '  "priority": [' >> /app/truck_custom.json && \
+    echo '    {' >> /app/truck_custom.json && \
+    echo '      "if": "road_class == MOTORWAY",' >> /app/truck_custom.json && \
+    echo '      "multiply_by": "1.2"' >> /app/truck_custom.json && \
+    echo '    },' >> /app/truck_custom.json && \
+    echo '    {' >> /app/truck_custom.json && \
+    echo '      "if": "road_class == TRUNK",' >> /app/truck_custom.json && \
+    echo '      "multiply_by": "1.1"' >> /app/truck_custom.json && \
+    echo '    },' >> /app/truck_custom.json && \
+    echo '    {' >> /app/truck_custom.json && \
+    echo '      "if": "max_width < 3.0",' >> /app/truck_custom.json && \
+    echo '      "multiply_by": "0"' >> /app/truck_custom.json && \
+    echo '    },' >> /app/truck_custom.json && \
+    echo '    {' >> /app/truck_custom.json && \
+    echo '      "if": "max_height < 4.0",' >> /app/truck_custom.json && \
+    echo '      "multiply_by": "0"' >> /app/truck_custom.json && \
+    echo '    }' >> /app/truck_custom.json && \
+    echo '  ],' >> /app/truck_custom.json && \
+    echo '  "speed": [' >> /app/truck_custom.json && \
+    echo '    {' >> /app/truck_custom.json && \
+    echo '      "if": "road_class == MOTORWAY",' >> /app/truck_custom.json && \
+    echo '      "limit_to": "100"' >> /app/truck_custom.json && \
+    echo '    },' >> /app/truck_custom.json && \
+    echo '    {' >> /app/truck_custom.json && \
+    echo '      "if": "road_class == TRUNK",' >> /app/truck_custom.json && \
+    echo '      "limit_to": "90"' >> /app/truck_custom.json && \
+    echo '    }' >> /app/truck_custom.json && \
+    echo '  ],' >> /app/truck_custom.json && \
+    echo '  "distance_influence": 80' >> /app/truck_custom.json && \
+    echo '}' >> /app/truck_custom.json
 
 # Create improved config with turn costs and motorway preference
 RUN echo 'graphhopper:' > /app/config.yml && \
