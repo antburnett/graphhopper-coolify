@@ -1,6 +1,5 @@
 FROM openjdk:17-jdk-slim
 
-# Dockerfile - back to absolutely basic GraphHopper setup
 # Set working directory
 WORKDIR /app
 
@@ -13,7 +12,7 @@ RUN wget https://repo1.maven.org/maven2/com/graphhopper/graphhopper-web/10.0/gra
 # Create data directory
 RUN mkdir -p /app/data
 
-# Create basic config WITHOUT custom model files - use GraphHopper defaults
+# Create config with basic turn costs only
 RUN echo 'graphhopper:' > /app/config.yml && \
     echo '  datareader.file: /app/data/australian_capital_territory-latest.osm.pbf' >> /app/config.yml && \
     echo '  graph.location: /app/data/graph-cache' >> /app/config.yml && \
@@ -23,10 +22,12 @@ RUN echo 'graphhopper:' > /app/config.yml && \
     echo '  import.osm.ignored_highways: footway,cycleway,path,pedestrian,steps' >> /app/config.yml && \
     echo '  profiles:' >> /app/config.yml && \
     echo '    - name: car' >> /app/config.yml && \
+    echo '      custom_model_files: [car.json]' >> /app/config.yml && \
     echo '      turn_costs:' >> /app/config.yml && \
     echo '        vehicle_types: [motorcar, motor_vehicle]' >> /app/config.yml && \
     echo '        u_turn_costs: 300' >> /app/config.yml && \
     echo '    - name: truck' >> /app/config.yml && \
+    echo '      custom_model_files: [truck.json]' >> /app/config.yml && \
     echo '      turn_costs:' >> /app/config.yml && \
     echo '        vehicle_types: [hgv, motor_vehicle]' >> /app/config.yml && \
     echo '        u_turn_costs: 600' >> /app/config.yml && \
